@@ -31,12 +31,20 @@ try:
     print("Lendo o arquivo de pedidos...")
     pedidos_df = pd.read_excel(pedidos_filename)
 
-    # 3. Extrai os valores das colunas necessárias
-    observacoes = pedidos_df.iloc[:, 57].fillna('').tolist() # BF (índice 57)
-    val_q_list = pedidos_df.iloc[:, 16].fillna('').tolist() # Q (índice 16)
-    val_ab_list = pedidos_df.iloc[:, 24].fillna('').tolist() # Y (índice 24, VALOR RD - PDF) - Vai para D27
-    val_ax_list = pedidos_df.iloc[:, 47].fillna('').tolist() # AV (índice 47, Custo UNT HW + Patrimonio) - Vai para D42
-    val_ar_list = pedidos_df.iloc[:, 41].fillna('').tolist() # AP (índice 41, PTAX) - Vai para B47
+    # Limpando espaços em branco do início e fim do nome das colunas para garantir que a busca não falhe
+    pedidos_df.columns = pedidos_df.columns.str.strip()
+
+    # 3. Extrai os valores das colunas necessárias usando busca dinâmica (pelo nome do cabeçalho)
+    try:
+        observacoes = pedidos_df['Observações NF'].fillna('').tolist()
+        val_q_list = pedidos_df['Qtde'].fillna('').tolist()            
+        val_ab_list = pedidos_df['VALOR RD - PDF'].fillna('').tolist() 
+        val_ax_list = pedidos_df['Custo UNT HW + Patrimonio'].fillna('').tolist()
+        val_ar_list = pedidos_df['PTAX'].fillna('').tolist()           
+    except KeyError as e:
+        print(f"\nERRO: Alguma coluna solicitada não existe na planilha base: {e}")
+        # Encerra caso a coluna não exista e retorna o erro sem quebrar
+        raise e
     
     print(f"Encontradas {len(observacoes)} linhas para processar.")
 
