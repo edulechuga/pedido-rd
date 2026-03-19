@@ -1,0 +1,15 @@
+# Ambiente Virtual e Cache
+__pycache__/
+*.pyc
+
+# Arquivos do Sistema Operacional
+.DS_Store
+
+# Planilhas e Arquivos Compactados
+*.zip
+*.xlsx
+
+# Diretórios de Saída Gerados
+OLD.pedidos_gerados_excel/
+pedidos_gerados/
+pedidos_gerados_excel/
